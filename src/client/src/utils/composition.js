@@ -18,3 +18,21 @@ export const isEmpty = obj => {
 
     return true;
 };
+
+export const toCurrency = value => {
+    try {
+        if (typeof value !== 'number') {
+            value = +value;
+        }
+
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0
+        });
+
+        return formatter.format(value);
+    } catch (error) {
+        return value;
+    }
+}

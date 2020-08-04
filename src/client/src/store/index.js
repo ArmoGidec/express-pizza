@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '../utils/api';
 
+import cartModule from './cart.js';
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -21,6 +23,9 @@ const store = new Vuex.Store({
     },
     getters: {
         pizzas: ({ pizzas }) => pizzas
+    },
+    modules: {
+        cart: cartModule
     }
 });
 

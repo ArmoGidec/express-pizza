@@ -1,20 +1,14 @@
 /**
- * @typedef {Object} Price
- * @property {number} usd
- * @property {number} eur
+ * @typedef {import('./Pizza')} Pizza
  */
 
 /**
- * @typedef {Object} Pizza
- * @prop {number}  id;
- * @prop {string}  name;
- * @prop {string}  description;
- * @prop {Price}  price;
+ * @typedef {import('mongodb').ObjectId} ObjectId
  */
 
 class Cart {
     /**
-     * @type {Map<number, Pizza}
+     * @type {Map<ObjectId, Pizza}
      */
     _items = new Map();
 
@@ -23,7 +17,7 @@ class Cart {
      * @returns {Cart}
      */
     constructor(items = []) {
-        this._items = items.map((item) => [item.id, item]);
+        this._items = items.map((item) => [item._id, item]);
     }
 
     /**
@@ -31,12 +25,12 @@ class Cart {
      * @returns {Cart}
      */
     add(item) {
-        this._items.set(item.id, item);
+        this._items.set(item._id, item);
         return this;
     }
 
     /**
-     * @param {number} itemId
+     * @param {ObjectId} itemId
      * @returns {Cart}
      */
     remove(itemId) {
@@ -51,5 +45,9 @@ class Cart {
         return [...this._items.values()];
     }
 }
+
+Cart.of = (cart = {}) => {
+    return new Cart(cart._items);
+};
 
 module.exports = Cart;

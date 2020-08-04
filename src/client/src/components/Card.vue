@@ -7,7 +7,10 @@
         </v-card-text>
         <v-spacer></v-spacer>
         <v-card-title class="py-0">
-            {{ pizza.price.usd }} $
+            {{ pizza.price.usd | toCurrency }}
+            <template v-if="count > 1">
+                * {{ count }} = {{ pizza.price.usd * count | toCurrency }}
+            </template>
         </v-card-title>
         <v-card-actions>
             <Counter

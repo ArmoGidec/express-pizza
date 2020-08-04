@@ -36,7 +36,7 @@ router.get('/me', authMiddleware, (req, res) => {
     });
 });
 
-router.all('logout', authMiddleware, async (req, res) => {
+router.all('/logout', authMiddleware, async (req, res) => {
     try {
         const user = req.user;
         user.tokens = user.tokens.filter(({ token }) => token !== req.token);

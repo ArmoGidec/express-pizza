@@ -4,7 +4,7 @@
   "description": "Web application for online pizza ordering",
   "main": "server.js",
   "scripts": {
-    "dev": "npx node-dev --notify=false --clear server.js"
+    "dev": "npx node-dev --inspect --notify=false --clear server.js"
   },
   "author": "Gataullin <diatomiccoder>",
   "license": "ISC",

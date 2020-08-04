@@ -13,7 +13,7 @@
 export default {
     name: 'App',
     components: {
-        Header: () => import('$src/components/Header.vue')
+        Header: () => import('./components/Header.vue')
     }
 };
 </script>

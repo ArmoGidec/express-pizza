@@ -1,15 +1,29 @@
 <template>
-  <hello-world />
+    <v-row>
+        <v-col v-for="pizza in pizzas" :key="pizza.id" cols="12" xs="6" md="4" lg="3">
+            <Card :pizza="pizza" />
+        </v-col>
+    </v-row>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
+import { mapGetters, mapActions } from 'vuex';
 
-  export default {
+import { isEmpty } from '../utils/composition.js';
+
+export default {
     name: 'Home',
-
-    components: {
-      HelloWorld,
+    computed: {
+        ...mapGetters(['pizzas'])
     },
-  }
+    methods: {
+        ...mapActions(['getPizzas'])
+    },
+    created() {
+        isEmpty(this.pizzas) && this.getPizzas();
+    },
+    components: {
+        Card: () => import('../components/Card.vue')
+    }
+};
 </script>

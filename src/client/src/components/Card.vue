@@ -1,6 +1,6 @@
 <template>
     <v-card max class="card">
-        <v-img :src="pizza.photoUrl" />
+        <v-img :src="pizza.photoUrl" class="blue-grey darken-2" />
         <v-card-title>{{ pizza.name }}</v-card-title>
         <v-card-text>
             {{ pizza.description }}
@@ -20,12 +20,13 @@
                 v-on:subtract="change(-1)"
             />
             <v-spacer></v-spacer>
-            <v-btn>Add to Cart</v-btn>
+            <v-btn @click="add">Add to Cart</v-btn>
         </v-card-actions>
     </v-card>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 const defaultPizza = {
     name: '',
     description: '',
@@ -44,14 +45,19 @@ export default {
         }
     },
     data: () => ({
-        count: 1
+        count: 1,
     }),
     components: {
         Counter: () => import('./Counter.vue')
     },
     methods: {
+        ...mapActions(['addToCart']),
         change(val) {
             this.count = this.count + val || 1;
+        },
+        async add() {
+            this.addToCart({ ...this.pizza, count: this.count });
+            this.count = 1;
         }
     }
 };

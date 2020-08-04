@@ -14,4 +14,13 @@ router.get('/', (req, res) => {
     res.send(cart.getItems());
 });
 
+router.post('/set', (req, res) => {
+    try {
+        req.session.cart = new Cart(req.body);
+        res.send();
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
 module.exports = router;

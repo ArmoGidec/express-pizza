@@ -27,7 +27,7 @@ const pizzaSchema = new mongoose.Schema({
 });
 
 pizzaSchema.methods.serialize = function() {
-    return pick(this, ['name', 'description', 'price', 'photoUrl']);
+    return pick(this, ['name', 'description', 'price', 'photoUrl', '_id']);
 }
 
 const Pizza = mongoose.model('Pizza', pizzaSchema);

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { default: validator } = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const pick = require('lodash.pick');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -67,13 +68,9 @@ userSchema.statics.findByCredentials = async (email, password) => {
     return user;
 };
 
-userSchema.methods.serialize = function() {
-    const user = this;
-    return {
-        name: user.name,
-        email: user.email
-    };
-}
+userSchema.methods.serialize = function () {
+    return pick(this, ['name', 'email']);
+};
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

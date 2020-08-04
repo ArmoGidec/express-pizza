@@ -1,15 +1,8 @@
 const router = require('express').Router();
-const db = require('../data/db.js');
-const usersRouter = require('./users.js');
+const pizzaRouter = require('./pizza.js');
+const userRouter = require('./user.js');
 
-router.get('/', (_, res) => {
-    /**
-     * @type {import('../models/Cart.js').Pizza[]}
-     */
-    const pizzas = db.getPizzas();
-    res.json(pizzas);
-});
-
-router.use('/users', usersRouter);
+router.use('/pizza', pizzaRouter);
+router.use('/user', userRouter);
 
 module.exports = router;

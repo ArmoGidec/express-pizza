@@ -5,7 +5,6 @@
         <v-card-text>
             {{ pizza.description }}
         </v-card-text>
-        <v-spacer></v-spacer>
         <v-card-title class="py-0">
             {{ pizza.price.usd | toCurrency }}
             <template v-if="count > 1">
@@ -68,5 +67,9 @@ export default {
     height: 100%;
     display: flex;
     flex-direction: column;
+
+    &__img {
+        flex: 1;
+    }
 }
 </style>

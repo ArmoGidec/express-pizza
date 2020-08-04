@@ -8,11 +8,28 @@
                     </router-link>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-badge color="green" :content="cart.length" :value="cart.length" bordered overlap>
-                    <v-btn fab small color="teal">
-                        <v-icon>mdi-cart</v-icon>
-                    </v-btn>
-                </v-badge>
+                <v-dialog max-width="560">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-badge
+                            color="green"
+                            :content="cart.length"
+                            :value="cart.length"
+                            bordered
+                            overlap
+                        >
+                            <v-btn
+                                fab
+                                small
+                                color="teal"
+                                v-on="on"
+                                v-bind="attrs"
+                            >
+                                <v-icon>mdi-cart-outline</v-icon>
+                            </v-btn>
+                        </v-badge>
+                    </template>
+                    <Cart />
+                </v-dialog>
             </v-row>
         </v-container>
     </v-app-bar>
@@ -25,6 +42,9 @@ export default {
     name: 'Header',
     computed: {
         ...mapGetters(['cart'])
+    },
+    components: {
+        Cart: () => import('./Cart.vue')
     }
 };
 </script>

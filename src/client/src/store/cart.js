@@ -1,3 +1,4 @@
+import debounce from 'lodash.debounce';
 import api from '../utils/api';
 
 const state = {
@@ -15,6 +16,12 @@ const mutations = {
         const { count, ...item } = payload;
         const items = Array(count).fill().map(() => ({ ...item }));
         state.cart = state.cart.concat(items);
+    },
+    REMOVE_FROM_CART(state, id) {
+        const index = state.cart.findIndex(({ _id }) => _id === id);
+        if (index !== -1) {   
+            state.cart.splice(index, 1);
+        }
     }
 };
 
@@ -29,11 +36,19 @@ const actions = {
     },
     addToCart({ commit, dispatch }, item) {
         commit('ADD_TO_CART', item);
-        return dispatch('setCart');
+        return dispatch('updateCart');
     },
-    setCart({ state }) {
-        return api.post('/cart/set', state.cart);
-    }
+    clearCart({ commit, dispatch }) {
+        commit('SET_CART', []);
+        dispatch('updateCart');
+    },
+    removeFromCart({ commit, dispatch }, id) {
+        commit('REMOVE_FROM_CART', id);
+        dispatch('updateCart');
+    },
+    updateCart: debounce(({ state }) => {
+        api.post('/cart/set', state.cart);
+    }, 600),
 };
 
 /**

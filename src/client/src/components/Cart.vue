@@ -4,14 +4,23 @@
         <v-card-text>
             <v-list>
                 <v-list-item v-for="pizza in cart" :key="pizza._id">
-                    {{ pizza.name }} - {{ pizza.description }} -
-                    {{ pizza.count }}
+                    <span class="mr-2">{{ pizza.name }}</span>
+                    <strong> {{ pizza.price.usd | toCurrency }}</strong>
+                    <v-spacer></v-spacer>
+                    <Counter
+                        :count="pizza.count"
+                        v-on:add="addToCart({ ...pizza, count: 1})"
+                        v-on:subtract="removeFromCart(pizza._id)"
+                    />
+                    <v-btn fab small text class="ml-4"
+                        ><v-icon>mdi-close</v-icon></v-btn
+                    >
                 </v-list-item>
             </v-list>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-            <v-btn color="error">Clear cart </v-btn>
+            <v-btn color="error" @click="clear">Clear cart </v-btn>
             <v-spacer></v-spacer>
             <v-btn color="success">Pay order</v-btn>
         </v-card-actions>
@@ -19,7 +28,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import groupby from 'lodash.groupby';
+
 export default {
     name: 'Cart',
     computed: {
@@ -32,6 +43,16 @@ export default {
                 count: group.length
             }));
         }
+    },
+    methods: {
+        ...mapActions(['clearCart', 'removeFromCart', 'addToCart']),
+        clear() {
+            this.clearCart();
+            this.$emit('clear');
+        }
+    },
+    components: {
+        Counter: () => import('./Counter.vue')
     }
 };
 </script>

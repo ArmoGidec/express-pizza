@@ -8,7 +8,7 @@
                     </router-link>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-dialog max-width="560">
+                <v-dialog max-width="560" v-model="openCart">
                     <template v-slot:activator="{ on, attrs }">
                         <v-badge
                             color="green"
@@ -21,14 +21,14 @@
                                 fab
                                 small
                                 color="teal"
-                                v-on="on"
+                                v-on="cart.length > 0 && on"
                                 v-bind="attrs"
                             >
                                 <v-icon>mdi-cart-outline</v-icon>
                             </v-btn>
                         </v-badge>
                     </template>
-                    <Cart />
+                    <Cart v-on:clear="openCart = false"/>
                 </v-dialog>
             </v-row>
         </v-container>
@@ -40,6 +40,9 @@ import { mapGetters } from 'vuex';
 
 export default {
     name: 'Header',
+    data: () => ({
+        openCart: false
+    }),
     computed: {
         ...mapGetters(['cart'])
     },

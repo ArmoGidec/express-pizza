@@ -25,12 +25,13 @@
                 </v-col>
                 <v-col cols="12" lg="6">
                     <v-card>
-                        <v-card-title>Total price</v-card-title>
-                        <v-divider></v-divider>
+                        <v-card-title class="justify-center"
+                            >Order list</v-card-title
+                        >
                         <v-card-text>
                             <div
                                 class="d-flex text-h6"
-                                v-for="pizza in formatCart"
+                                v-for="pizza in formatedCart"
                                 :key="pizza._id"
                             >
                                 {{ pizza.name }}
@@ -57,7 +58,23 @@
                                     }}</strong
                                 >
                             </div>
+                            <v-divider class="my-3"></v-divider>
+                            <div class="d-flex text-h6">
+                                + Delivery cost
+                                <v-spacer></v-spacer>
+                                <strong>
+                                    {{ delivery.usd | toCurrency('usd') }} /
+                                    {{ delivery.eur | toCurrency('eur') }}
+                                </strong>
+                            </div>
                         </v-card-text>
+                        <v-divider></v-divider>
+                        <v-card-title>
+                            Total price
+                            <v-spacer></v-spacer>
+                            {{ totalPrice.usd | toCurrency('usd') }} /
+                            {{ totalPrice.eur | toCurrency('eur') }}
+                        </v-card-title>
                     </v-card>
                 </v-col>
             </v-row>
@@ -70,10 +87,30 @@ import { mapGetters, mapActions } from 'vuex';
 import { formatCart } from '../utils/composition.js';
 export default {
     name: 'Order',
+    data: () => ({
+        delivery: {
+            usd: 2,
+            eur: 1.75
+        }
+    }),
     computed: {
         ...mapGetters(['cart']),
-        formatCart() {
+        formatedCart() {
             return formatCart(this.cart);
+        },
+        totalPrice() {
+            const prices = this.formatedCart
+                .map(group => ({ ...group.price, count: group.count }))
+                .concat(this.delivery);
+            return prices.reduce(
+                (total, current) => {
+                    return {
+                        usd: total.usd + current.usd * (current.count || 1),
+                        eur: total.eur + current.eur * (current.count || 1)
+                    };
+                },
+                { usd: 0, eur: 0 }
+            );
         }
     },
     methods: {

@@ -23,6 +23,7 @@
                                 color="teal"
                                 v-on="cart.length > 0 && on"
                                 v-bind="attrs"
+                                :title="cart.length > 0 ? 'Open cart' : 'Cart is empty'"
                             >
                                 <v-icon>mdi-cart-outline</v-icon>
                             </v-btn>

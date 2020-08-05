@@ -1,7 +1,12 @@
 <template>
     <v-main>
         <Header>
-            <v-btn-toggle v-model="currency" class="mr-3" rounded>
+            <v-btn-toggle
+                v-model="currency"
+                class="mr-3"
+                rounded
+                title="Toggle currency"
+            >
                 <v-btn :value="'usd'">
                     <v-icon>mdi-currency-usd</v-icon>
                 </v-btn>
@@ -26,7 +31,9 @@
                                 v-on="cart.length > 0 && on"
                                 v-bind="attrs"
                                 :title="
-                                    cart.length > 0 ? 'Open cart' : 'Cart is empty'
+                                    cart.length > 0
+                                        ? 'Open cart'
+                                        : 'Cart is empty'
                                 "
                             >
                                 <v-icon>mdi-cart-outline</v-icon>
@@ -49,7 +56,7 @@
             </v-dialog>
         </Header>
         <v-container>
-            <v-row>
+            <v-row v-if="pizzas.length > 0">
                 <v-col
                     v-for="pizza in pizzas"
                     :key="pizza.id"
@@ -60,6 +67,13 @@
                 >
                     <Card :pizza="pizza" />
                 </v-col>
+            </v-row>
+            <v-row v-else class="justify-center my-16">
+                <v-progress-circular
+                    indeterminate
+                    color="primary"
+                    size="100"
+                ></v-progress-circular>
             </v-row>
         </v-container>
     </v-main>

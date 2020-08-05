@@ -17,10 +17,15 @@ const mutations = {
         const items = Array(count).fill().map(() => ({ ...item }));
         state.cart = state.cart.concat(items);
     },
-    REMOVE_FROM_CART(state, id) {
-        const index = state.cart.findIndex(({ _id }) => _id === id);
-        if (index !== -1) {   
-            state.cart.splice(index, 1);
+    REMOVE_FROM_CART(state, payload) {
+        const { _id: id, count } = payload;
+        if (count === 1) {
+            const index = state.cart.findIndex(({ _id }) => _id === id);
+            if (index !== -1) {   
+                state.cart.splice(index, 1);
+            }
+        } else {
+            state.cart = state.cart.filter(({ _id }) => _id !== id);
         }
     }
 };
@@ -42,8 +47,8 @@ const actions = {
         commit('SET_CART', []);
         dispatch('updateCart');
     },
-    removeFromCart({ commit, dispatch }, id) {
-        commit('REMOVE_FROM_CART', id);
+    removeFromCart({ commit, dispatch }, payload) {
+        commit('REMOVE_FROM_CART', payload);
         dispatch('updateCart');
     },
     updateCart: debounce(({ state }) => {

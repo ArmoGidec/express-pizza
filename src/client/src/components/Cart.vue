@@ -9,10 +9,10 @@
                     <v-spacer></v-spacer>
                     <Counter
                         :count="pizza.count"
-                        v-on:add="addToCart({ ...pizza, count: 1})"
-                        v-on:subtract="removeFromCart(pizza._id)"
+                        v-on:add="addToCart({ ...pizza, count: 1 })"
+                        v-on:subtract="removeFromCart({ ...pizza, count: 1 })"
                     />
-                    <v-btn fab small text class="ml-4"
+                    <v-btn fab small text class="ml-4" title="Remove from cart" @click="removeFromCart(pizza)"
                         ><v-icon>mdi-close</v-icon></v-btn
                     >
                 </v-list-item>

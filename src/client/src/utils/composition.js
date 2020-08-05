@@ -1,3 +1,4 @@
+import groupby from 'lodash.groupby';
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**
@@ -19,7 +20,7 @@ export const isEmpty = obj => {
     return true;
 };
 
-export const toCurrency = value => {
+export const toCurrency = (value, currency) => {
     try {
         if (typeof value !== 'number') {
             value = +value;
@@ -27,7 +28,7 @@ export const toCurrency = value => {
 
         const formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
+            currency: currency.toUpperCase(),
             minimumFractionDigits: 0
         });
 
@@ -35,4 +36,12 @@ export const toCurrency = value => {
     } catch (error) {
         return value;
     }
-}
+};
+
+export const formatCart = cart => {
+    const cartGroups = groupby(cart, '_id');
+    return Object.entries(cartGroups).map(([, group]) => ({
+        ...group[0],
+        count: group.length
+    }));
+};

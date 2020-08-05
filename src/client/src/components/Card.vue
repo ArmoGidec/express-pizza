@@ -6,9 +6,9 @@
             {{ pizza.description }}
         </v-card-text>
         <v-card-title class="py-0">
-            {{ pizza.price.usd | toCurrency }}
+            {{ pizza.price[currency] | toCurrency(currency) }}
             <template v-if="count > 1">
-                * {{ count }} = {{ pizza.price.usd * count | toCurrency }}
+                * {{ count }} = {{ pizza.price[currency] * count | toCurrency(currency) }}
             </template>
         </v-card-title>
         <v-card-actions>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 const defaultPizza = {
     name: '',
     description: '',
@@ -46,8 +46,8 @@ export default {
     data: () => ({
         count: 1,
     }),
-    components: {
-        Counter: () => import('./Counter.vue')
+    computed: {
+        ...mapGetters(['currency'])
     },
     methods: {
         ...mapActions(['addToCart']),
@@ -58,7 +58,10 @@ export default {
             this.addToCart({ ...this.pizza, count: this.count });
             this.count = 1;
         }
-    }
+    },
+    components: {
+        Counter: () => import('./Counter.vue')
+    },
 };
 </script>
 

@@ -1,11 +1,6 @@
 <template>
     <v-app>
-        <Header />
-        <v-main>
-            <v-container>
-                <router-view />
-            </v-container>
-        </v-main>
+        <router-view></router-view>
     </v-app>
 </template>
 
@@ -15,9 +10,6 @@ import { isEmpty } from './utils/composition';
 
 export default {
     name: 'App',
-    components: {
-        Header: () => import('./components/Header.vue')
-    },
     computed: {
         ...mapGetters(['cart']),
     },

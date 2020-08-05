@@ -21,3 +21,9 @@ export default {
     }
 };
 </script>
+
+<style>
+html[lang] {
+    overflow-y: auto;
+}
+</style>

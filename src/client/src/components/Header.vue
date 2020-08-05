@@ -23,13 +23,25 @@
                                 color="teal"
                                 v-on="cart.length > 0 && on"
                                 v-bind="attrs"
-                                :title="cart.length > 0 ? 'Open cart' : 'Cart is empty'"
+                                :title="
+                                    cart.length > 0
+                                        ? 'Open cart'
+                                        : 'Cart is empty'
+                                "
                             >
                                 <v-icon>mdi-cart-outline</v-icon>
                             </v-btn>
                         </v-badge>
                     </template>
-                    <Cart v-on:clear="openCart = false"/>
+                    <Cart>
+                        <template v-slot:actions>
+                            <v-btn color="error" @click="clear"
+                                >Clear cart</v-btn
+                            >
+                            <v-spacer></v-spacer>
+                            <v-btn color="success">Pay order</v-btn>
+                        </template>
+                    </Cart>
                 </v-dialog>
             </v-row>
         </v-container>
@@ -37,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: 'Header',
@@ -46,6 +58,13 @@ export default {
     }),
     computed: {
         ...mapGetters(['cart'])
+    },
+    methods: {
+        ...mapActions(['clearCart']),
+        clear() {
+            this.clearCart();
+            this.openCart = false;
+        }
     },
     components: {
         Cart: () => import('./Cart.vue')

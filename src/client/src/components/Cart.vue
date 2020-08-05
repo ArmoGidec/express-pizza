@@ -20,9 +20,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
-            <v-btn color="error" @click="clear">Clear cart </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn color="success">Pay order</v-btn>
+            <slot name="actions"></slot>
         </v-card-actions>
     </v-card>
 </template>
@@ -45,11 +43,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['clearCart', 'removeFromCart', 'addToCart']),
-        clear() {
-            this.clearCart();
-            this.$emit('clear');
-        }
+        ...mapActions(['removeFromCart', 'addToCart']),
     },
     components: {
         Counter: () => import('./Counter.vue')

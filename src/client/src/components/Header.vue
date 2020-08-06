@@ -7,6 +7,11 @@
                         <v-btn text>Express-Pizza</v-btn>
                     </router-link>
                 </v-toolbar-title>
+                <template v-if="!isAuthenticated">
+                    <router-link :to="{name:'auth'}">
+                        <v-btn outlined class="ml-3">Sign In/Up</v-btn>
+                    </router-link>
+                </template>
                 <v-spacer></v-spacer>
                 <slot></slot>
             </v-row>
@@ -15,7 +20,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
     name: 'Header',
+    computed: {
+        ...mapGetters(['isAuthenticated'])
+    }
 };
 </script>

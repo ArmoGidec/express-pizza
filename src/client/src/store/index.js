@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import api from '../utils/api';
 
 import cartModule from './cart.js';
+import userModule from './user.js';
 
 Vue.use(Vuex);
 
@@ -34,7 +35,8 @@ const store = new Vuex.Store({
         currency: ({ currency }) => currency
     },
     modules: {
-        cart: cartModule
+        cart: cartModule,
+        user: userModule
     }
 });
 

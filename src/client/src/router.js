@@ -14,6 +14,11 @@ const router = new VueRouter({
             path: '/order',
             name: 'order',
             component: () => import('./views/Order.vue')
+        },
+        {
+            path: '/auth',
+            name: 'auth',
+            component: () => import('./views/Auth.vue')
         }
     ]
 });

@@ -11,13 +11,14 @@ import { isEmpty } from './utils/composition';
 export default {
     name: 'App',
     computed: {
-        ...mapGetters(['cart']),
+        ...mapGetters(['cart', 'user'])
     },
     methods: {
-        ...mapActions(['getCart'])
+        ...mapActions(['getCart', 'getUser'])
     },
     created() {
         isEmpty(this.cart) && this.getCart();
+        isEmpty(this.user) && this.getUser();
     }
 };
 </script>

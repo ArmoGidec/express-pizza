@@ -20,36 +20,72 @@
                         <v-tabs-items v-model="tab">
                             <v-tab-item key="login">
                                 <AuthForm v-on:submit="login">
-                                    <v-btn color="primary" type="submit">Login</v-btn>
+                                    <v-btn color="primary" type="submit">
+                                        Login
+                                    </v-btn>
                                 </AuthForm>
                             </v-tab-item>
                             <v-tab-item key="register">
                                 <AuthForm v-on:submit="register">
-                                    <v-btn color="primary" type="submit">Register</v-btn>
+                                    <v-btn color="primary" type="submit">
+                                        Register
+                                    </v-btn>
                                 </AuthForm>
                             </v-tab-item>
                         </v-tabs-items>
                     </v-card>
                 </v-col>
             </v-row>
+            <v-snackbar v-model="snackbar.show">
+                {{ snackbar.text }}
+                <template v-slot:action="{ attrs }">
+                    <v-btn
+                        v-bind="attrs"
+                        text
+                        color="error"
+                        @click="snackbar.show = false"
+                    >
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
         </v-container>
     </v-main>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import { isEmpty } from '../utils/composition';
 
 export default {
     name: 'Auth',
     data: () => ({
-        tab: null
+        tab: null,
+        snackbar: {
+            show: false,
+            text: ''
+        }
     }),
     computed: {
         ...mapGetters(['user'])
     },
     methods: {
-        ...mapActions(['login', 'register'])
+        async auth(action, defaultError, credentials) {
+            const result = await this.$store.dispatch(action, credentials);
+            if (!result.user) {
+                this.snackbar.text =
+                    result.message || result.error || defaultError;
+                this.snackbar.show = true;
+            } else {
+                this.$router.push({ name: 'home' });
+            }
+        },
+        login(credentials) {
+            this.auth('login', 'Login failed((', credentials);
+        },
+        register(credentials) {
+            this.auth('register', 'Register failed((', credentials);
+        }
     },
     created() {
         !isEmpty(this.user) && this.$router.replace({ name: 'home' });

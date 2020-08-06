@@ -8,9 +8,17 @@
                     </router-link>
                 </v-toolbar-title>
                 <template v-if="!isAuthenticated">
-                    <router-link :to="{name:'auth'}">
-                        <v-btn outlined class="ml-3">Sign In/Up</v-btn>
+                    <router-link :to="{ name: 'auth' }">
+                        <v-btn outlined class="mx-3">
+                            Sign In/Up <v-icon>mdi-login</v-icon>
+                        </v-btn>
                     </router-link>
+                </template>
+                <template v-else>
+                    <v-btn outlined @click="logout" class="mx-3">
+                        Log Out
+                        <v-icon>mdi-logout</v-icon>
+                    </v-btn>
                 </template>
                 <v-spacer></v-spacer>
                 <slot></slot>
@@ -20,11 +28,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
     name: 'Header',
     computed: {
         ...mapGetters(['isAuthenticated'])
+    },
+    methods: {
+        ...mapActions(['logout'])
     }
 };
 </script>

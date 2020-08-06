@@ -5,11 +5,6 @@ const jwt = require('jsonwebtoken');
 const pick = require('lodash.pick');
 
 const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-    },
     email: {
         type: String,
         required: true,
@@ -17,14 +12,18 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         validate: (value) => {
             if (!validator.isEmail(value)) {
-                throw new Error({ error: 'Invalid email address' });
+                throw new Error('Invalid address');
             }
         },
     },
     password: {
         type: String,
         required: true,
-        minLength: 6,
+        validate: (value) => {
+            if (value.length < 6) {
+                throw new Error('Too short');
+            }
+        }
     },
     tokens: [
         {
@@ -57,19 +56,19 @@ userSchema.methods.generateAuthToken = async function () {
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email });
     if (!user) {
-        throw new Error({ error: 'Invalid login credentials' });
+        throw new Error('Invalid login credentials');
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-        throw new Error({ error: 'Invalid login credentials' });
+        throw new Error('Invalid login credentials');
     }
 
     return user;
 };
 
 userSchema.methods.serialize = function () {
-    return pick(this, ['name', 'email']);
+    return pick(this, ['email']);
 };
 
 const User = mongoose.model('User', userSchema);

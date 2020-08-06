@@ -8,11 +8,13 @@ const path = require('path');
 
 const userMiddleware = require('./middlewares/user.js');
 const router = require('./router');
+const morgan = require('morgan');
 
 const SECRET = process.env.SECRET;
 
 const app = express();
 
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());

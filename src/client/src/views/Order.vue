@@ -107,12 +107,14 @@
                                             :rules="form.phoneRules"
                                             label="Phone number *"
                                             required
+                                            type="tel"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6">
                                         <v-text-field
                                             v-model="form.email"
                                             :rules="form.emailRules"
+                                            type="email"
                                             label="Email"
                                         ></v-text-field>
                                     </v-col>
@@ -121,7 +123,7 @@
                                     <v-col>
                                         <v-text-field
                                             v-model="form.address"
-                                            :rules="form.adressRules"
+                                            :rules="form.addressRules"
                                             label="Address *"
                                             required
                                         ></v-text-field>
@@ -130,20 +132,42 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="success" type="submit">To order</v-btn>
+                                <v-btn color="success" type="submit"
+                                    >To order</v-btn
+                                >
                             </v-card-actions>
                         </v-card>
                     </v-form>
                 </v-col>
             </v-row>
+
+            <v-overlay :value="processing">
+                <v-progress-circular
+                    indeterminate
+                    color="primary"
+                    size="100"
+                ></v-progress-circular>
+                <h4>Processing...</h4>
+            </v-overlay>
+
+            <v-overlay :value="success">
+                <v-sheet elevation="3" color="success" class="pa-5">
+                    <h3>Your order is being cooked!</h3>
+                    <div class="btn-wrapper mt-3 d-flex justify-center">
+                        <v-btn @click="clear" color="secondary">Ok</v-btn>
+                    </div>
+                </v-sheet>
+            </v-overlay>
         </v-container>
     </v-main>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { formatCart } from '../utils/composition.js';
 import { isMobilePhone, isEmail } from 'validator';
+
+import { formatCart } from '../utils/composition.js';
+import api from '../utils/api.js';
 
 export default {
     name: 'Order',
@@ -164,8 +188,11 @@ export default {
             ],
             email: '',
             emailRules: [v => !v.trim() || isEmail(v) || 'Invalid email'],
+            address: '',
             addressRules: [v => !!v.trim() || 'Address is required']
-        }
+        },
+        processing: false,
+        success: false,
     }),
     computed: {
         ...mapGetters(['cart']),
@@ -194,8 +221,16 @@ export default {
             this.$router.push({ name: 'home' });
         },
         submitOrder() {
-            const { firstname, lastname, email, phone } = this.form;
-            console.log({ firstname, lastname, email, phone });
+            this.processing = true;
+            const { firstname, lastname, email, phone, address } = this.form;
+            api.post('/order', {
+                pizzas: this.cart.map(pizza => pizza.id),
+                data: { firstname, lastname, email, phone, address }
+            })
+                .then(() => {
+                    this.processing = false;
+                    this.success = true;
+                });
         }
     },
     components: {

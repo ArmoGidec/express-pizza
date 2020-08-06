@@ -9,7 +9,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         pizzas: [],
-        currency: 'usd'
+        currency: localStorage.getItem('currency') || 'usd'
     },
     mutations: {
         SET_PIZZAS(state, payload) {
@@ -17,6 +17,7 @@ const store = new Vuex.Store({
         },
         TOGGLE_CURRENCY(state) {
             state.currency = state.currency === 'usd' ? 'eur' : 'usd';
+            localStorage.setItem('currency', state.currency);
         }
     },
     actions: {

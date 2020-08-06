@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { default: validator } = require('validator');
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pick = require('lodash.pick');

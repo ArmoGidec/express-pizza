@@ -77,6 +77,64 @@
                         </v-card-title>
                     </v-card>
                 </v-col>
+                <v-col cols="12" lg="8">
+                    <v-form v-model="form.valid" @submit.prevent="submitOrder">
+                        <v-card>
+                            <v-card-title>Delivery Form</v-card-title>
+                            <v-card-text>
+                                <v-row>
+                                    <v-col cols="12" sm="6">
+                                        <v-text-field
+                                            v-model="form.firstname"
+                                            :rules="form.nameRules"
+                                            label="First name *"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6">
+                                        <v-text-field
+                                            v-model="form.lastname"
+                                            :rules="form.nameRules"
+                                            label="Last name *"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" sm="6">
+                                        <v-text-field
+                                            v-model="form.phone"
+                                            :rules="form.phoneRules"
+                                            label="Phone number *"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6">
+                                        <v-text-field
+                                            v-model="form.email"
+                                            :rules="form.emailRules"
+                                            label="Email"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
+                                        <v-text-field
+                                            v-model="form.address"
+                                            :rules="form.adressRules"
+                                            label="Address *"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="success" type="submit">To order</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-form>
+                </v-col>
             </v-row>
         </v-container>
     </v-main>
@@ -85,12 +143,28 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { formatCart } from '../utils/composition.js';
+import { isMobilePhone, isEmail } from 'validator';
+
 export default {
     name: 'Order',
     data: () => ({
         delivery: {
             usd: 2,
             eur: 1.75
+        },
+        form: {
+            valid: false,
+            firstname: '',
+            lastname: '',
+            nameRules: [v => !!v.trim() || 'Name is required'],
+            phone: '',
+            phoneRules: [
+                v => !!v.trim() || 'Phone is required',
+                v => isMobilePhone(v) || 'Invalid phone number'
+            ],
+            email: '',
+            emailRules: [v => !v.trim() || isEmail(v) || 'Invalid email'],
+            addressRules: [v => !!v.trim() || 'Address is required']
         }
     }),
     computed: {
@@ -118,6 +192,10 @@ export default {
         clear() {
             this.clearCart();
             this.$router.push({ name: 'home' });
+        },
+        submitOrder() {
+            const { firstname, lastname, email, phone } = this.form;
+            console.log({ firstname, lastname, email, phone });
         }
     },
     components: {

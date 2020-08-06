@@ -18,14 +18,14 @@ const mutations = {
         state.cart = state.cart.concat(items);
     },
     REMOVE_FROM_CART(state, payload) {
-        const { _id: id, count } = payload;
+        const { id, count } = payload;
         if (count === 1) {
-            const index = state.cart.findIndex(({ _id }) => _id === id);
+            const index = state.cart.findIndex(({ id: _id }) => _id === id);
             if (index !== -1) {   
                 state.cart.splice(index, 1);
             }
         } else {
-            state.cart = state.cart.filter(({ _id }) => _id !== id);
+            state.cart = state.cart.filter(({ id: _id }) => _id !== id);
         }
     }
 };

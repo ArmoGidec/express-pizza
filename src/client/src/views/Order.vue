@@ -32,7 +32,7 @@
                             <div
                                 class="d-flex text-h6"
                                 v-for="pizza in formatedCart"
-                                :key="pizza._id"
+                                :key="pizza.id"
                             >
                                 {{ pizza.name }}
                                 <v-spacer></v-spacer>

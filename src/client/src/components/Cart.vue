@@ -3,7 +3,7 @@
         <v-card-title>Cart</v-card-title>
         <v-card-text>
             <v-list>
-                <v-list-item v-for="pizza in cart" :key="pizza._id">
+                <v-list-item v-for="pizza in cart" :key="pizza.id">
                     <span class="mr-2">{{ pizza.name }}</span>
                     <strong
                         >{{ pizza.price.usd | toCurrency('usd') }} /

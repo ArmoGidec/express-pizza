@@ -39,7 +39,7 @@ export const toCurrency = (value, currency) => {
 };
 
 export const formatCart = cart => {
-    const cartGroups = groupby(cart, '_id');
+    const cartGroups = groupby(cart, 'id');
     return Object.entries(cartGroups).map(([, group]) => ({
         ...group[0],
         count: group.length

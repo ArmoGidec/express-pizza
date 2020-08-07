@@ -49,6 +49,14 @@
                     </v-btn>
                 </template>
             </v-snackbar>
+            <v-overlay :value="processing">
+                <v-progress-circular
+                    indeterminate
+                    color="primary"
+                    size="100"
+                ></v-progress-circular>
+                <h4>Processing...</h4>
+            </v-overlay>
         </v-container>
     </v-main>
 </template>
@@ -64,14 +72,17 @@ export default {
         snackbar: {
             show: false,
             text: ''
-        }
+        },
+        processing: false
     }),
     computed: {
         ...mapGetters(['user'])
     },
     methods: {
         async auth(action, defaultError, credentials) {
+            this.processing = true;
             const result = await this.$store.dispatch(action, credentials);
+            this.processing = false;
             if (!result.user) {
                 this.snackbar.text =
                     result.message || result.error || defaultError;

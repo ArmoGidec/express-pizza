@@ -103,7 +103,7 @@ export default {
         this.$store.subscribeAction({
             after: (action) => {
                 if (action.type === 'login') {
-                    this.$store.dispatch('getOrders');
+                    this.isAuthenticated && this.$store.dispatch('getOrders');
                 }
             }
         })

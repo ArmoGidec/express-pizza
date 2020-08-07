@@ -45,7 +45,8 @@ const actions = {
                         Authorization: `Bearer ${getters.token}`
                     }
                 })
-                .then(({ data }) => commit('SET_USER', data.user)))
+                .then(({ data }) => commit('SET_USER', data.user))
+                .catch(() => commit('SET_TOKEN', '')))
         );
     },
     async auth({ commit }, { path, credentials }) {
@@ -88,7 +89,7 @@ const actions = {
 const getters = {
     user: ({ user }) => user,
     token: ({ token }) => token,
-    isAuthenticated: ({ user }) => !isEmpty(user)
+    isAuthenticated: ({ token }) => !isEmpty(token)
 };
 
 export default { state, mutations, actions, getters };

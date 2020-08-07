@@ -63,7 +63,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { isEmpty } from '../utils/composition';
 
 export default {
     name: 'Auth',
@@ -76,7 +75,7 @@ export default {
         processing: false
     }),
     computed: {
-        ...mapGetters(['user'])
+        ...mapGetters(['isAuthenticated'])
     },
     methods: {
         async auth(action, defaultError, credentials) {
@@ -99,7 +98,7 @@ export default {
         }
     },
     created() {
-        !isEmpty(this.user) && this.$router.replace({ name: 'home' });
+        this.isAuthenticated && this.$router.replace({ name: 'home' });
     },
     components: {
         Header: () => import('../components/Header.vue'),

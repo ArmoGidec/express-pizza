@@ -57,7 +57,7 @@ userSchema.methods.generateAuthToken = async function () {
 };
 
 userSchema.statics.findByCredentials = async (email, password) => {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate('orders');
     if (!user) {
         throw new Error('Invalid login credentials');
     }
@@ -71,7 +71,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 };
 
 userSchema.methods.toJSON = function () {
-    return pick(this, ['email']);
+    return pick(this, ['email', 'orders']);
 };
 
 const User = mongoose.model('User', userSchema);

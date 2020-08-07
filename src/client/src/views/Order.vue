@@ -215,7 +215,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['clearCart']),
+        ...mapActions(['clearCart', 'addOrder']),
         clear() {
             this.clearCart();
             this.$router.push({ name: 'home' });
@@ -231,6 +231,10 @@ export default {
                     Authorization: `Bearer ${this.token}`
                 }
             })
+                .then(response => {
+                    this.addOrder(response.data);
+                    return response;
+                })
                 .then(() => {
                     this.processing = false;
                     this.success = true;

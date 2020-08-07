@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import api from '../utils/api';
 
 import cartModule from './cart.js';
-import userModule from './user.js';
+import authModule from './auth.js';
 
 Vue.use(Vuex);
 
@@ -36,7 +36,7 @@ const store = new Vuex.Store({
     },
     modules: {
         cart: cartModule,
-        user: userModule
+        user: authModule
     }
 });
 

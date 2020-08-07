@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
         }
 
         req.session.cart = [];
-        res.status(201).send();
+        res.status(201).send(order);
     } catch (error) {
         res.status(400).send(error);
     }
@@ -27,7 +27,7 @@ router.get('/', authMiddleware, async (req, res) => {
             _id: {
                 $in: req.user.orders,
             },
-        }).populate('pizzas') || [];
+        }) || [];
 
         res.send(orders);
     } catch (error) {

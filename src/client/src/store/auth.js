@@ -22,6 +22,13 @@ const mutations = {
         } else {
             localStorage.removeItem(tokenKey);
         }
+    },
+    ADD_ORDER(state, payload) {
+        if (state.user) {
+            let orders = state.user.orders || [];
+            orders = orders.concat(payload);
+            state.user.orders = orders;
+        }
     }
 };
 
@@ -67,6 +74,11 @@ const actions = {
                 Authorization: `Bearer ${token}`
             }
         });
+    },
+    addOrder({ getters, commit }, order) {
+        if (getters.isAuthenticated) {
+            commit('ADD_ORDER', order);
+        }
     }
 };
 

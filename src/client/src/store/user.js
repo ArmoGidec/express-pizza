@@ -1,8 +1,10 @@
 import api from '../utils/api.js';
 import { isEmpty } from '../utils/composition.js';
 
+const tokenKey = 'pizza:token';
+
 const state = {
-    token: localStorage.getItem('token') || '',
+    token: localStorage.getItem(tokenKey) || '',
     user: null
 };
 
@@ -16,9 +18,9 @@ const mutations = {
     SET_TOKEN(state, payload) {
         state.token = payload;
         if (!isEmpty(payload)) {
-            localStorage.setItem('token', payload);
+            localStorage.setItem(tokenKey, payload);
         } else {
-            localStorage.removeItem('token');
+            localStorage.removeItem(tokenKey);
         }
     }
 };
@@ -56,12 +58,13 @@ const actions = {
     async register({ dispatch }, credentials) {
         return dispatch('auth', { path: '/user', credentials });
     },
-    logout({ commit }) {
+    logout({ commit, state }) {
+        const token = state.token;
         commit('SET_USER', null);
         commit('SET_TOKEN', '');
         return api.get('/user/logout', {
             headers: {
-                Authorization: `Bearer ${state.token}`
+                Authorization: `Bearer ${token}`
             }
         });
     }

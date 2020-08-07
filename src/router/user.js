@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findByCredentials(email, password);
+        const user = await User.findByCredentials(email, password).catch(() => {});
         if (!user) {
             return res.status(401).send({ error: 'Invalid login/password' });
         }
@@ -31,9 +31,13 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/me', authMiddleware, (req, res) => {
-    res.send({
-        user: req.user,
-    });
+    try {
+        res.send({
+            user: req.user,
+        });
+    } catch (error) {
+        res.status(500).send(error);
+    }
 });
 
 router.all('/logout', authMiddleware, async (req, res) => {

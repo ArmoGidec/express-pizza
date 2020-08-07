@@ -73,7 +73,7 @@
                                         <v-text-field
                                             v-model="form.address"
                                             :rules="form.addressRules"
-                                            label="Address *"
+                                            label="Shipping address *"
                                             required
                                         ></v-text-field>
                                     </v-col>
@@ -101,9 +101,26 @@
 
             <v-overlay :value="success">
                 <v-sheet elevation="3" color="success" class="pa-5">
-                    <h3>Your order is being cooked!</h3>
+                    <h3>Your pizza is almost ready!</h3>
                     <div class="btn-wrapper mt-3 d-flex justify-center">
                         <v-btn @click="clear" color="secondary">Ok</v-btn>
+                    </div>
+                </v-sheet>
+            </v-overlay>
+
+            <v-overlay :value="failed">
+                <v-sheet elevation="3" color="error" class="pa-5">
+                    <h3>
+                        Order finished with fail! Please, contact with us via
+                        email:
+                        <a href="mailto:chudak_93@live.com">
+                            chudak_93@live.com
+                        </a>
+                    </h3>
+                    <div class="btn-wrapper mt-3 d-flex justify-center">
+                        <v-btn @click="failed = false" color="secondary">
+                            Close
+                        </v-btn>
                     </div>
                 </v-sheet>
             </v-overlay>
@@ -134,7 +151,8 @@ export default {
             addressRules: [v => !!v.trim() || 'Address is required']
         },
         processing: false,
-        success: false
+        success: false,
+        failed: false
     }),
     computed: {
         ...mapGetters(['cart', 'token'])
@@ -152,13 +170,16 @@ export default {
             this.addOrder({
                 pizzas: this.cart.map(pizza => pizza.id),
                 data: { firstname, lastname, email, phone, address }
-            }).then(() => {
-                this.success = true;
-            }).catch(() => {
-                this.failed = true;
-            }).finally(() => {
-                this.processing = false;
-            });
+            })
+                .then(() => {
+                    this.success = true;
+                })
+                .catch(() => {
+                    this.failed = true;
+                })
+                .finally(() => {
+                    this.processing = false;
+                });
         }
     },
     components: {

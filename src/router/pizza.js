@@ -3,7 +3,7 @@ const Pizza = require('../models/Pizza.js');
 
 router.get('/', async (_, res) => {
     const pizzas = await Pizza.find();
-    res.send(pizzas.map((pizza) => pizza.serialize()));
+    res.send(pizzas);
 });
 
 module.exports = router;

@@ -195,7 +195,7 @@ export default {
         success: false,
     }),
     computed: {
-        ...mapGetters(['cart']),
+        ...mapGetters(['cart', 'token']),
         formatedCart() {
             return formatCart(this.cart);
         },
@@ -226,6 +226,10 @@ export default {
             api.post('/order', {
                 pizzas: this.cart.map(pizza => pizza.id),
                 data: { firstname, lastname, email, phone, address }
+            }, {
+                headers: {
+                    Authorization: `Bearer ${this.token}`
+                }
             })
                 .then(() => {
                     this.processing = false;

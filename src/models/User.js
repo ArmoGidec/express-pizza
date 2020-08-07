@@ -33,6 +33,9 @@ const userSchema = new mongoose.Schema({
             },
         },
     ],
+    orders: [
+        { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }
+    ]
 });
 
 userSchema.pre('save', function (next) {
@@ -67,7 +70,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
     return user;
 };
 
-userSchema.methods.serialize = function () {
+userSchema.methods.toJSON = function () {
     return pick(this, ['email']);
 };
 

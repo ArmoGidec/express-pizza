@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
         await user.save();
         const token = await user.generateAuthToken();
         res.status(201).send({
-            user: user.serialize(),
+            user,
             token,
         });
     } catch (error) {
@@ -24,7 +24,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).send({ error: 'Invalid login/password' });
         }
         const token = await user.generateAuthToken();
-        res.send({ user: user.serialize(), token });
+        res.send({ user, token });
     } catch (error) {
         res.status(400).send(error);
     }
@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/me', authMiddleware, (req, res) => {
     res.send({
-        user: req.user.serialize(),
+        user: req.user,
     });
 });
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const pick = require('lodash.pick');
 
 const orderSchema = new mongoose.Schema({
     pizzas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pizza' }],
@@ -33,6 +34,10 @@ const orderSchema = new mongoose.Schema({
         default: Date.now
     }
 });
+
+orderSchema.methods.toJSON = function() {
+    return pick(this, ['data', 'pizzas', 'delivered', 'id', 'date']);
+};
 
 const Order = mongoose.model('Order', orderSchema);
 

@@ -29,13 +29,13 @@ const mutations = {
  * @type {import('vuex').ActionTree<state>}
  */
 const actions = {
-    getUser({ state, commit }) {
+    getUser({ getters, commit }) {
         return (
-            (!isEmpty(state.token) &&
+            (!isEmpty(getters.token) &&
             api
                 .get('/user/me', {
                     headers: {
-                        Authorization: `Bearer ${state.token}`
+                        Authorization: `Bearer ${getters.token}`
                     }
                 })
                 .then(({ data }) => commit('SET_USER', data.user)))
@@ -58,8 +58,8 @@ const actions = {
     async register({ dispatch }, credentials) {
         return dispatch('auth', { path: '/user', credentials });
     },
-    logout({ commit, state }) {
-        const token = state.token;
+    logout({ commit, getters }) {
+        const token = getters.token;
         commit('SET_USER', null);
         commit('SET_TOKEN', '');
         return api.get('/user/logout', {
@@ -75,6 +75,7 @@ const actions = {
  */
 const getters = {
     user: ({ user }) => user,
+    token: ({ token }) => token,
     isAuthenticated: ({ user }) => !isEmpty(user)
 };
 

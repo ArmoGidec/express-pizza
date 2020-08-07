@@ -99,6 +99,14 @@ export default {
     },
     created() {
         this.isAuthenticated && this.$router.replace({ name: 'home' });
+
+        this.$store.subscribeAction({
+            after: (action) => {
+                if (action.type === 'login') {
+                    this.$store.dispatch('getOrders');
+                }
+            }
+        })
     },
     components: {
         Header: () => import('../components/Header.vue'),

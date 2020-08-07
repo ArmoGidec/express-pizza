@@ -24,58 +24,7 @@
                     </Cart>
                 </v-col>
                 <v-col cols="12" lg="6">
-                    <v-card>
-                        <v-card-title class="justify-center"
-                            >Order list</v-card-title
-                        >
-                        <v-card-text>
-                            <div
-                                class="d-flex text-h6"
-                                v-for="pizza in formatedCart"
-                                :key="pizza.id"
-                            >
-                                {{ pizza.name }}
-                                <v-spacer></v-spacer>
-                                <strong
-                                    >{{ pizza.count }} * ({{
-                                        pizza.price.usd | toCurrency('usd')
-                                    }}
-                                    /
-                                    {{
-                                        pizza.price.eur | toCurrency('eur')
-                                    }})</strong
-                                >
-                                <span class="mx-2">=</span>
-                                <strong
-                                    >{{
-                                        (pizza.price.usd * pizza.count)
-                                            | toCurrency('usd')
-                                    }}
-                                    /
-                                    {{
-                                        (pizza.price.eur * pizza.count)
-                                            | toCurrency('eur')
-                                    }}</strong
-                                >
-                            </div>
-                            <v-divider class="my-3"></v-divider>
-                            <div class="d-flex text-h6">
-                                + Delivery cost
-                                <v-spacer></v-spacer>
-                                <strong>
-                                    {{ delivery.usd | toCurrency('usd') }} /
-                                    {{ delivery.eur | toCurrency('eur') }}
-                                </strong>
-                            </div>
-                        </v-card-text>
-                        <v-divider></v-divider>
-                        <v-card-title>
-                            Total price
-                            <v-spacer></v-spacer>
-                            {{ totalPrice.usd | toCurrency('usd') }} /
-                            {{ totalPrice.eur | toCurrency('eur') }}
-                        </v-card-title>
-                    </v-card>
+                    <OrderList :pizzas="cart" />
                 </v-col>
                 <v-col cols="12" lg="8">
                     <v-form v-model="form.valid" @submit.prevent="submitOrder">
@@ -166,16 +115,9 @@
 import { mapGetters, mapActions } from 'vuex';
 import { isMobilePhone, isEmail } from 'validator';
 
-import { formatCart } from '../utils/composition.js';
-import api from '../utils/api.js';
-
 export default {
     name: 'Order',
     data: () => ({
-        delivery: {
-            usd: 2,
-            eur: 1.75
-        },
         form: {
             valid: false,
             firstname: '',
@@ -192,27 +134,10 @@ export default {
             addressRules: [v => !!v.trim() || 'Address is required']
         },
         processing: false,
-        success: false,
+        success: false
     }),
     computed: {
-        ...mapGetters(['cart', 'token']),
-        formatedCart() {
-            return formatCart(this.cart);
-        },
-        totalPrice() {
-            const prices = this.formatedCart
-                .map(group => ({ ...group.price, count: group.count }))
-                .concat(this.delivery);
-            return prices.reduce(
-                (total, current) => {
-                    return {
-                        usd: total.usd + current.usd * (current.count || 1),
-                        eur: total.eur + current.eur * (current.count || 1)
-                    };
-                },
-                { usd: 0, eur: 0 }
-            );
-        }
+        ...mapGetters(['cart', 'token'])
     },
     methods: {
         ...mapActions(['clearCart', 'addOrder']),
@@ -223,27 +148,23 @@ export default {
         submitOrder() {
             this.processing = true;
             const { firstname, lastname, email, phone, address } = this.form;
-            api.post('/order', {
+
+            this.addOrder({
                 pizzas: this.cart.map(pizza => pizza.id),
                 data: { firstname, lastname, email, phone, address }
-            }, {
-                headers: {
-                    Authorization: `Bearer ${this.token}`
-                }
-            })
-                .then(response => {
-                    this.addOrder(response.data);
-                    return response;
-                })
-                .then(() => {
-                    this.processing = false;
-                    this.success = true;
-                });
+            }).then(() => {
+                this.success = true;
+            }).catch(() => {
+                this.failed = true;
+            }).finally(() => {
+                this.processing = false;
+            });
         }
     },
     components: {
-        Header: () => import('../components/Header'),
-        Cart: () => import('../components/Cart')
+        Header: () => import('../components/Header.vue'),
+        Cart: () => import('../components/Cart.vue'),
+        OrderList: () => import('../components/OrderList.vue')
     }
 };
 </script>

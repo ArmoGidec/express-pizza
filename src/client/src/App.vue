@@ -1,6 +1,16 @@
 <template>
     <v-app>
-        <router-view></router-view>
+        <v-main v-if="loading">
+            <v-row class="justify-center my-16">
+                <Header />
+                <v-progress-circular
+                    indeterminate
+                    color="primary"
+                    size="100"
+                ></v-progress-circular>
+            </v-row>
+        </v-main>
+        <router-view v-else></router-view>
     </v-app>
 </template>
 
@@ -10,15 +20,29 @@ import { isEmpty } from './utils/composition';
 
 export default {
     name: 'App',
+    data: () => ({
+        loading: true
+    }),
     computed: {
-        ...mapGetters(['cart', 'user'])
+        ...mapGetters(['pizzas', 'cart', 'user', 'orders', 'isAuthenticated'])
     },
     methods: {
-        ...mapActions(['getCart', 'getUser'])
+        ...mapActions(['getPizzas', 'getCart', 'getUser', 'getOrders'])
     },
-    created() {
-        isEmpty(this.cart) && this.getCart();
-        isEmpty(this.user) && this.getUser();
+    async created() {
+        try {
+            await Promise.all([
+                isEmpty(this.user) && this.getUser(),
+                isEmpty(this.pizzas) && this.getPizzas(),
+                isEmpty(this.cart) && this.getCart(),
+                isEmpty(this.orders) && this.isAuthenticated && this.getOrders()
+            ]);
+        } finally {
+            this.loading = false;
+        }
+    },
+    components: {
+        Header: () => import('./components/Header.vue')
     }
 };
 </script>

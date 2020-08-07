@@ -56,7 +56,7 @@
             </v-dialog>
         </Header>
         <v-container>
-            <v-row v-if="pizzas.length > 0">
+            <v-row>
                 <v-col
                     v-for="pizza in pizzas"
                     :key="pizza.id"
@@ -68,21 +68,12 @@
                     <Card :pizza="pizza" />
                 </v-col>
             </v-row>
-            <v-row v-else class="justify-center my-16">
-                <v-progress-circular
-                    indeterminate
-                    color="primary"
-                    size="100"
-                ></v-progress-circular>
-            </v-row>
         </v-container>
     </v-main>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-
-import { isEmpty } from '../utils/composition.js';
 
 export default {
     name: 'Home',
@@ -101,14 +92,11 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['getPizzas', 'clearCart', 'toggleCurrency']),
+        ...mapActions(['clearCart', 'toggleCurrency']),
         clear() {
             this.clearCart();
             this.openCart = false;
         }
-    },
-    created() {
-        isEmpty(this.pizzas) && this.getPizzas();
     },
     components: {
         Header: () => import('../components/Header.vue'),

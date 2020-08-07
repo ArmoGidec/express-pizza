@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
         }
 
         req.session.cart = [];
-        res.status(201).send(order);
+        res.status(201).send(await order.execPopulate('pizzas'));
     } catch (error) {
         res.status(400).send(error);
     }
@@ -23,15 +23,33 @@ router.post('/', async (req, res) => {
 
 router.get('/', authMiddleware, async (req, res) => {
     try {
-        const orders = await Order.find({
-            _id: {
-                $in: req.user.orders,
-            },
-        }) || [];
+        const orders =
+            (await Order.find({
+                _id: {
+                    $in: req.user.orders,
+                },
+            }).populate('pizzas')) || [];
 
         res.send(orders);
     } catch (error) {
         res.status(500).send(error);
+    }
+});
+
+router.post('/:orderId/mark', authMiddleware, async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        if (!req.user.orders.every((order) => order.id !== orderId)) {
+            throw { error: 'Invalid order id' };
+        }
+
+        const order = await Order.findById(orderId);
+        order.delivered = true;
+        await order.save();
+
+        res.send(await order.execPopulate('pizzas'));
+    } catch (error) {
+        res.status(400).send(error);
     }
 });
 

@@ -10,15 +10,21 @@
                 <template v-if="!isAuthenticated">
                     <router-link :to="{ name: 'auth' }">
                         <v-btn outlined class="mx-3">
-                            Sign In/Up <v-icon>mdi-login</v-icon>
+                            Sign In/Up <v-icon class="ml-1">mdi-login</v-icon>
                         </v-btn>
                     </router-link>
                 </template>
                 <template v-else>
                     <v-btn outlined @click="logout" class="mx-3">
                         Log Out
-                        <v-icon>mdi-logout</v-icon>
+                        <v-icon class="ml-1">mdi-logout</v-icon>
                     </v-btn>
+                    <router-link :to="{ name: 'orders' }" class="text-decoration-none">
+                        <v-btn outlined>
+                            My orders
+                            <v-icon class="ml-1">mdi-playlist-check</v-icon>
+                        </v-btn>
+                    </router-link>
                 </template>
                 <v-spacer></v-spacer>
                 <slot></slot>

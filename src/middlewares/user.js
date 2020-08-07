@@ -10,7 +10,7 @@ const user = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '');
         const data = jwt.verify(token, process.env.JWT_KEY);
-        const user = await User.findOne({ _id: data._id, 'tokens.token': token }).populate('orders');
+        const user = await User.findOne({ _id: data._id, 'tokens.token': token });
         req.user = user;
         req.token = token;
     } catch {}

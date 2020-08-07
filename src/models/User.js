@@ -71,7 +71,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 };
 
 userSchema.methods.toJSON = function () {
-    return pick(this, ['email', 'orders']);
+    return pick(this, ['email']);
 };
 
 const User = mongoose.model('User', userSchema);

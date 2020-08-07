@@ -9,6 +9,7 @@ import { toCurrency } from './utils/composition.js';
 Vue.config.productionTip = false;
 
 Vue.filter('toCurrency', toCurrency);
+Vue.filter('toLocaleDateString', value => new Date(value).toLocaleDateString());
 
 new Vue({
     router,

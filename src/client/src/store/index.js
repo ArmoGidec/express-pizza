@@ -4,13 +4,15 @@ import api from '../utils/api';
 
 import cartModule from './cart.js';
 import authModule from './auth.js';
+import orderModule from './order.js';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
         pizzas: [],
-        currency: localStorage.getItem('currency') || 'usd'
+        currency: localStorage.getItem('currency') || 'usd',
+        orders: []
     },
     mutations: {
         SET_PIZZAS(state, payload) {
@@ -19,7 +21,7 @@ const store = new Vuex.Store({
         TOGGLE_CURRENCY(state) {
             state.currency = state.currency === 'usd' ? 'eur' : 'usd';
             localStorage.setItem('currency', state.currency);
-        }
+        },
     },
     actions: {
         async getPizzas({ commit }) {
@@ -28,15 +30,16 @@ const store = new Vuex.Store({
         },
         toggleCurrency({ commit }) {
             commit('TOGGLE_CURRENCY');
-        }
+        },
     },
     getters: {
         pizzas: ({ pizzas }) => pizzas,
-        currency: ({ currency }) => currency
+        currency: ({ currency }) => currency,
     },
     modules: {
         cart: cartModule,
-        user: authModule
+        user: authModule,
+        order: orderModule
     }
 });
 

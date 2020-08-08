@@ -12,7 +12,6 @@ const store = new Vuex.Store({
     state: {
         pizzas: [],
         currency: localStorage.getItem('currency') || 'usd',
-        orders: []
     },
     mutations: {
         SET_PIZZAS(state, payload) {

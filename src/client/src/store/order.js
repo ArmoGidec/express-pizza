@@ -4,6 +4,9 @@ const state = {
     orders: []
 };
 
+/**
+ * @type { import('vuex'.MutationTree<state>) }
+ */
 const mutations = {
     SET_ORDERS(state, payload) {
         state.orders = payload;
@@ -16,6 +19,9 @@ const mutations = {
     }
 };
 
+/**
+ * @type { import('vuex').ActionTree<state> }
+ */
 const actions = {
     async getOrders({ commit, getters }) {
         const orders = (
@@ -52,6 +58,9 @@ const actions = {
     }
 };
 
+/**
+ * @type { import('vuex').GetterTree<state> }
+ */
 const getters = {
     orders: ({ orders }) => orders
 };

@@ -2,7 +2,7 @@ import groupby from 'lodash.groupby';
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**
- * @param { { [key in PropertyKey]: any } } obj
+ * @param { { [key in PropertyKey]: any } | any[] | string } obj
  * @return { boolean }
  */
 export const isEmpty = obj => {
@@ -20,6 +20,11 @@ export const isEmpty = obj => {
     return true;
 };
 
+/**
+ * @param { string|number } value
+ * @param { 'usd' | 'eur' } currency
+ * @returns { string }
+ */
 export const toCurrency = (value, currency) => {
     try {
         if (typeof value !== 'number') {
@@ -38,6 +43,23 @@ export const toCurrency = (value, currency) => {
     }
 };
 
+/**
+ * @typedef { Object } Pizza
+ * @property { string } id
+ * @property { string } name
+ * @property { string } description
+ * @property { string } photoUrl
+ * @property { Price } price
+ * 
+ * @typedef { Object } Price
+ * @property { number } usd
+ * @property { number } eur
+ */
+
+/**
+ * @param { Pizza[] } cart
+ * @returns { { count: number } & Pizza }
+ */
 export const formatCart = cart => {
     const cartGroups = groupby(cart, 'id');
     return Object.entries(cartGroups).map(([, group]) => ({

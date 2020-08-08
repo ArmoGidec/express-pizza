@@ -1,8 +1,8 @@
 <template>
     <v-app>
         <v-main v-if="loading">
+            <Header/>
             <v-row class="justify-center my-16">
-                <Header />
                 <v-progress-circular
                     indeterminate
                     color="primary"

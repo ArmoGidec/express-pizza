@@ -3,7 +3,7 @@
         <Header>
             <v-btn-toggle
                 v-model="currency"
-                class="mr-3"
+                class="mr-3 mt-2 mt-sm-0"
                 rounded
                 title="Toggle currency"
             >
@@ -23,7 +23,7 @@
                         bordered
                         overlap
                     >
-                        <div class="btn-wrapper">
+                        <div class="btn-wrapper mt-2 mt-sm-0">
                             <v-btn
                                 fab
                                 small

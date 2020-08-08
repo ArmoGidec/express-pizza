@@ -4,9 +4,10 @@
   "description": "Web application for online pizza ordering",
   "main": "server.js",
   "scripts": {
-    "dev": "npx node-dev --inspect --notify=false --clear server.js"
+    "dev": "npx node-dev --inspect --notify=false --clear server.js",
+    "start": "node server.js"
   },
-  "author": "Gataullin <diatomiccoder>",
+  "author": "Gataullin <diatomiccoder> Ildar",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

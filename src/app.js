@@ -35,4 +35,8 @@ app.use(userMiddleware);
 
 app.use('/api', router);
 
+app.use((_, res) => {
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
+
 module.exports = app;

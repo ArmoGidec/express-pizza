@@ -21,7 +21,7 @@
     "mongodb": "^3.6.0",
     "mongoose": "^5.9.27",
     "morgan": "^1.10.0",
-    "validator": "^13.1.1"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "node-dev": "^5.1.0"
